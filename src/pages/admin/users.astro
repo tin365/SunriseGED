@@ -1,0 +1,8 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+export const prerender = false;
+---
+<AdminLayout title="Users">
+  <h1 class="font-heading text-4xl font-bold text-gold">Users</h1>
+  <section class="mt-8 rounded-2xl border border-white/10 bg-site-dark p-5"><h2 class="font-heading text-2xl font-bold text-gold">Admin Team</h2><p class="mt-4 text-white/60">Super admins can invite users, assign roles, disable accounts, and reset 2FA through protected API operations.</p><div class="mt-5 overflow-x-auto"><table class="w-full min-w-[640px] text-left text-sm"><thead class="text-gold"><tr><th class="py-3">Name</th><th>Email</th><th>Role</th><th>Status</th></tr></thead><tbody><tr class="border-t border-white/10"><td class="py-3">Sunrise Administrator</td><td>admin@sunrisegeded.org</td><td>super_admin</td><td>Active</td></tr></tbody></table></div></section>
+</AdminLayout>

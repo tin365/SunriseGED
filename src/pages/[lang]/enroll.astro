@@ -1,0 +1,8 @@
+---
+import EnrollPage from '../../components/pages/EnrollPage.astro';
+import { normalizeLocale } from '../../lib/i18n';
+export function getStaticPaths() {
+  return [{ params: { lang: 'my' } }, { params: { lang: 'th' } }];
+}
+---
+<EnrollPage locale={normalizeLocale(Astro.params.lang)} />

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0A0A0A"/>
+  <circle cx="170" cy="500" r="220" fill="#F5B800" opacity=".16"/>
+  <rect x="90" y="85" width="1020" height="460" rx="26" fill="#1A1A1A" stroke="#333"/>
+  <circle cx="240" cy="315" r="106" fill="#0A0A0A" stroke="#F5B800" stroke-width="7"/>
+  <path d="M165 306a75 75 0 0 1 150 0" fill="#F5B800"/>
+  <rect x="146" y="296" width="188" height="48" fill="#E07B20"/>
+  <text x="240" y="330" text-anchor="middle" font-family="Arial, sans-serif" font-size="35" font-weight="900" fill="#fff">SUNRISE</text>
+  <text x="400" y="270" font-family="Arial, sans-serif" font-size="64" font-weight="900" fill="#F5B800">Sunrise GED</text>
+  <text x="400" y="345" font-family="Arial, sans-serif" font-size="42" font-weight="700" fill="#fff">Where Healing Meets Education</text>
+  <text x="400" y="407" font-family="Arial, sans-serif" font-size="28" fill="#cfcfcf">GED education, trauma healing, and community in Mae Sot, Thailand.</text>
+</svg>

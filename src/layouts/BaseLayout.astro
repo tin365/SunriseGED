@@ -1,0 +1,67 @@
+---
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import MessengerChat from '../components/MessengerChat.astro';
+import LineChat from '../components/LineChat.astro';
+import { getLangFromUrl, t } from '../lib/i18n';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const locale = getLangFromUrl(Astro.url.pathname);
+const dict = t(locale);
+const title = Astro.props.title ? `${Astro.props.title} | Sunrise GED` : 'Sunrise Trauma Healing Education';
+const description = Astro.props.description || dict.hero.subtitle;
+const canonical = new URL(Astro.url.pathname, Astro.site || 'https://sunrisegeded.org').toString();
+const orgJson = {
+  '@context': 'https://schema.org',
+  '@type': 'EducationalOrganization',
+  name: 'Sunrise Trauma Healing Education',
+  alternateName: ['Sunrise GED', 'Sunrise The Trauma Healing Program'],
+  url: 'https://sunrisegeded.org',
+  logo: 'https://sunrisegeded.org/logo.png',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Mae Sot',
+    addressRegion: 'Tak Province',
+    postalCode: '63110',
+    addressCountry: 'TH'
+  },
+  sameAs: ['https://facebook.com/sunrisetraumahealingeducation']
+};
+---
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;600;700&family=Noto+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="/og-image.jpg" />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(orgJson)} />
+  </head>
+  <body class="bg-site-black font-sans text-white antialiased">
+    <Nav locale={locale} dict={dict} />
+    <main>
+      <slot />
+    </main>
+    <Footer locale={locale} dict={dict} />
+    <MessengerChat />
+    <LineChat />
+  </body>
+</html>

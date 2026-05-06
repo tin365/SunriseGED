@@ -1,0 +1,17 @@
+---
+const { post, locale = 'en' } = Astro.props;
+const title = post[`title_${locale}`] || post.title_en;
+const excerpt = post[`excerpt_${locale}`] || post.excerpt_en || '';
+const image = post.featured_image || '';
+---
+<article class="overflow-hidden rounded-2xl border border-white/10 bg-site-dark">
+  <div class="aspect-[16/10] bg-gradient-to-br from-gold/25 via-site-gray to-site-black">
+    {image && <img src={image} alt="" class="h-full w-full object-cover" loading="lazy" />}
+  </div>
+  <div class="p-5">
+    <p class="mb-3 inline-flex rounded-full border border-gold/40 px-3 py-1 text-xs font-semibold uppercase text-gold">{post.type}</p>
+    <h3 class="font-heading text-xl font-bold text-white">{title}</h3>
+    <p class="mt-3 line-clamp-3 text-sm leading-6 text-white/70">{excerpt}</p>
+    <a href={`/media`} class="mt-5 inline-flex text-sm font-bold text-gold hover:text-orange">Read More</a>
+  </div>
+</article>

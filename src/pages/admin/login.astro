@@ -1,0 +1,16 @@
+---
+import LoginForm from '../../components/admin/LoginForm';
+import '../../styles/global.css';
+export const prerender = false;
+---
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>Login | Sunrise Admin</title></head>
+  <body class="grid min-h-screen place-items-center bg-site-black px-4 font-sans text-white">
+    <main class="w-full max-w-md">
+      <img src="/logo.png" alt="Sunrise GED" class="mx-auto mb-6 h-24 w-24 rounded-full" />
+      <h1 class="mb-6 text-center font-heading text-3xl font-bold text-gold">Admin Login</h1>
+      <LoginForm client:load />
+    </main>
+  </body>
+</html>

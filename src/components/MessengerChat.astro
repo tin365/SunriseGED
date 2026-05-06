@@ -1,0 +1,17 @@
+---
+const pageId = 'YOUR_FACEBOOK_PAGE_ID';
+---
+<div id="fb-root"></div>
+<Fragment set:html={`<div class="fb-customerchat" attribution="biz_inbox" page_id="${pageId}" theme_color="#F5B800" logged_in_greeting="Hello! How can Sunrise GED help you today?" logged_out_greeting="Hello! Ask us about enrollment or our programs."></div>`} />
+<script is:inline>
+  window.fbAsyncInit = function() {
+    if (window.FB) window.FB.init({ xfbml: true, version: 'v18.0' });
+  };
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+    if (fjs && fjs.parentNode) fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>

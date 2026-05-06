@@ -1,0 +1,8 @@
+---
+import MediaPage from '../../components/pages/MediaPage.astro';
+import { normalizeLocale } from '../../lib/i18n';
+export function getStaticPaths() {
+  return [{ params: { lang: 'my' } }, { params: { lang: 'th' } }];
+}
+---
+<MediaPage locale={normalizeLocale(Astro.params.lang)} />

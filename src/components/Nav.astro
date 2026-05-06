@@ -1,0 +1,55 @@
+---
+import LanguageSwitcher from './LanguageSwitcher.astro';
+const { locale, dict } = Astro.props;
+const links = [
+  ['/', dict.nav.home],
+  ['/about', dict.nav.about],
+  ['/programs', dict.nav.programs],
+  ['/media', dict.nav.media],
+  ['/enroll', dict.nav.enroll],
+  ['/contact', dict.nav.contact]
+];
+const current = Astro.url.pathname.replace(/^\/(my|th)/, '') || '/';
+const localize = (href: string) => locale === 'en' ? href : `/${locale}${href === '/' ? '' : href}`;
+---
+<header id="site-nav" class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-site-black/60 transition-colors backdrop-blur-sm">
+  <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8" aria-label="Primary navigation">
+    <a href={localize('/')} class="flex min-w-0 items-center gap-3">
+      <img src="/logo.png" alt="Sunrise GED" class="h-11 w-11 rounded-full" loading="eager" />
+      <span class="truncate font-heading text-lg font-bold text-white">Sunrise GED</span>
+    </a>
+    <div class="hidden items-center gap-7 lg:flex">
+      {links.map(([href, label]) => (
+        <a href={localize(href)} class:list={['relative py-2 text-sm font-semibold text-white/85 transition hover:text-gold', current === href && 'text-gold after:absolute after:inset-x-0 after:-bottom-1 after:h-0.5 after:bg-gold']}>{label}</a>
+      ))}
+    </div>
+    <div class="hidden items-center gap-3 lg:flex">
+      <LanguageSwitcher locale={locale} label={dict.common.switchLanguage} />
+      <a href={localize('/enroll')} class="rounded-md bg-gold px-4 py-2 text-sm font-bold text-site-black transition hover:bg-gold-dark">{dict.hero.enrollCTA}</a>
+    </div>
+    <button id="menu-button" class="grid h-10 w-10 place-items-center rounded-md border border-white/15 text-white lg:hidden" aria-label="Open menu" aria-expanded="false">
+      <span class="h-0.5 w-5 bg-current before:block before:h-0.5 before:w-5 before:-translate-y-1.5 before:bg-current after:block after:h-0.5 after:w-5 after:translate-y-1 after:bg-current"></span>
+    </button>
+  </nav>
+  <div id="mobile-menu" class="hidden border-t border-white/10 bg-site-black px-4 pb-5 lg:hidden">
+    <div class="grid gap-2 py-4">
+      {links.map(([href, label]) => <a href={localize(href)} class="rounded-md px-3 py-3 text-base font-semibold text-white hover:bg-white/5 hover:text-gold">{label}</a>)}
+    </div>
+    <div class="flex items-center justify-between gap-3">
+      <LanguageSwitcher locale={locale} label={dict.common.switchLanguage} />
+      <a href={localize('/enroll')} class="rounded-md bg-gold px-4 py-2 text-sm font-bold text-site-black">{dict.hero.enrollCTA}</a>
+    </div>
+  </div>
+</header>
+<script>
+  const nav = document.getElementById('site-nav');
+  const button = document.getElementById('menu-button');
+  const menu = document.getElementById('mobile-menu');
+  const setNav = () => nav?.classList.toggle('bg-site-black/95', window.scrollY > 24);
+  setNav();
+  window.addEventListener('scroll', setNav, { passive: true });
+  button?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('hidden') === false;
+    button.setAttribute('aria-expanded', String(open));
+  });
+</script>

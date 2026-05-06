@@ -1,0 +1,25 @@
+name = "sunrise-ged"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+main = "worker/index.ts"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "sunrise-ged-db"
+database_id = "REPLACE_WITH_YOUR_D1_ID"
+
+[[r2_buckets]]
+binding = "STORAGE"
+bucket_name = "sunrise-ged-storage"
+
+[vars]
+ENVIRONMENT = "production"
+SITE_URL = "https://sunrisegeded.org"
+PUBLIC_R2_BASE_URL = "https://sunrisegeded.org/media"
+ADMIN_EMAIL = "admin@sunrisegeded.org"
+
+# Secrets are set with wrangler secret put and must not be committed:
+# JWT_SECRET
+# RESEND_API_KEY
+# ADMIN_SETUP_TOKEN

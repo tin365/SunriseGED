@@ -1,0 +1,13 @@
+---
+const { item, locale = 'en' } = Astro.props;
+const title = item[`title_${locale}`] || item.title_en;
+---
+<a href={item.url} target="_blank" rel="noopener noreferrer" class="group relative block overflow-hidden rounded-2xl border border-white/10 bg-site-dark">
+  <img src={item.thumbnail_url || '/og-image.jpg'} alt={title} class="aspect-video w-full object-cover opacity-85 transition group-hover:opacity-100" loading="lazy" />
+  <span class="absolute inset-0 grid place-items-center">
+    <span class="grid h-14 w-14 place-items-center rounded-full bg-gold text-site-black transition group-hover:bg-orange">
+      <svg viewBox="0 0 24 24" class="h-7 w-7" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  </span>
+  <span class="absolute inset-x-0 bottom-0 bg-site-black/80 p-4 text-sm font-bold text-white">{title}</span>
+</a>

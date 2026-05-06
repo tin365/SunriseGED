@@ -1,0 +1,12 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import PostEditor from '../../components/admin/PostEditor';
+export const prerender = false;
+---
+<AdminLayout title="Posts">
+  <div class="flex flex-wrap items-center justify-between gap-4"><h1 class="font-heading text-4xl font-bold text-gold">Posts</h1><button class="rounded-md bg-gold px-5 py-3 font-bold text-site-black">New Post</button></div>
+  <div class="mt-8 grid gap-8 xl:grid-cols-[1fr_420px]">
+    <section class="rounded-2xl border border-white/10 bg-site-dark p-5"><h2 class="font-heading text-2xl font-bold text-gold">Published and Draft Posts</h2><p class="mt-4 text-white/60">Use the editor to create multilingual news, activities, announcements, and achievements. Filters by status and type are supported by the API.</p></section>
+    <PostEditor client:load />
+  </div>
+</AdminLayout>

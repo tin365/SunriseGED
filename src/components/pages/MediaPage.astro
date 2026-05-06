@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import VideoCard from '../VideoCard.astro';
+import { t, type Locale } from '../../lib/i18n';
+const { locale = 'en' } = Astro.props as { locale: Locale };
+const dict = t(locale);
+const items = [
+  { type: 'photo', title_en: 'Classroom learning circle', title_my: 'စာသင်ခန်း လေ့လာရေးဝိုင်း', title_th: 'วงเรียนรู้ในห้องเรียน', thumbnail_url: '/sample/classroom.svg', url: '/sample/classroom.svg' },
+  { type: 'photo', title_en: 'Student activity day', title_my: 'ကျောင်းသား လှုပ်ရှားမှုနေ့', title_th: 'วันกิจกรรมนักเรียน', thumbnail_url: '/sample/activity.svg', url: '/sample/activity.svg' },
+  { type: 'youtube', title_en: 'Sunrise community introduction', title_my: 'Sunrise အသိုင်းအဝိုင်း မိတ်ဆက်', title_th: 'แนะนำชุมชน Sunrise', thumbnail_url: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' },
+  { type: 'document', title_en: 'Enrollment information sheet', title_my: 'ကျောင်းဝင်ခွင့် အချက်အလက်စာရွက်', title_th: 'เอกสารข้อมูลการสมัคร', thumbnail_url: '/sample/document.svg', url: '/documents/enrollment-info.pdf' }
+];
+---
+<BaseLayout title={dict.media.title} description="Photos, videos, and documents from Sunrise GED.">
+  <section class="bg-site-black px-4 pb-12 pt-32 sm:px-6 lg:px-8"><div class="mx-auto max-w-5xl"><h1 class="font-heading text-5xl font-bold text-gold">{dict.media.title}</h1></div></section>
+  <section class="section-pad bg-site-black pt-0">
+    <div class="mx-auto max-w-7xl">
+      <div class="flex flex-wrap gap-3" id="media-tabs">
+        {['All', dict.media.photos, dict.media.videos, dict.media.documents].map((tab) => <button data-filter={tab.toLowerCase()} class="rounded-md border border-white/15 px-4 py-2 text-sm font-bold text-white hover:border-gold hover:text-gold">{tab}</button>)}
+      </div>
+      <div id="media-grid" class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((item) => item.type === 'youtube' ? <div data-type="videos"><VideoCard item={item} locale={locale} /></div> : <a data-type={item.type === 'photo' ? 'photos' : 'documents'} href={item.url} class="block overflow-hidden rounded-2xl border border-white/10 bg-site-dark"><img src={item.thumbnail_url} alt={item.title_en} class="aspect-video w-full object-cover" loading="lazy" /><div class="p-4"><p class="font-bold text-gold">{item[`title_${locale}`] || item.title_en}</p><p class="mt-2 text-sm text-white/60">{item.type === 'document' ? 'Download' : 'Open'}</p></div></a>)}
+      </div>
+      <button id="load-more" class="mt-8 rounded-md border border-gold px-5 py-3 font-bold text-gold hover:border-orange hover:text-orange">Load More</button>
+    </div>
+  </section>
+  <script>
+    document.querySelectorAll('#media-tabs button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const filter = button.getAttribute('data-filter');
+        document.querySelectorAll('#media-grid > *').forEach((item) => {
+          item.classList.toggle('hidden', filter !== 'all' && item.getAttribute('data-type') !== filter);
+        });
+      });
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,13 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import PrintBridge from '../../components/admin/PrintBridge';
+export const prerender = false;
+---
+<AdminLayout title="Settings">
+  <h1 class="font-heading text-4xl font-bold text-gold">Settings</h1>
+  <div class="mt-8 grid gap-5 xl:grid-cols-2">
+    <section class="rounded-2xl border border-white/10 bg-site-dark p-5"><h2 class="font-heading text-2xl font-bold text-gold">School Info</h2><label class="mt-4 block"><span class="mb-2 block text-sm text-gold">Address</span><input class="input" value="Mae Sot, Tak Province, Thailand 63110" /></label></section>
+    <section class="rounded-2xl border border-white/10 bg-site-dark p-5"><h2 class="font-heading text-2xl font-bold text-gold">Security</h2><p class="mt-4 text-white/70">Use the API endpoints to set up 2FA, change password, and invalidate sessions.</p></section>
+    <PrintBridge client:load />
+  </div>
+</AdminLayout>

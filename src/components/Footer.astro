@@ -1,0 +1,27 @@
+---
+const { locale, dict } = Astro.props;
+const prefix = locale === 'en' ? '' : `/${locale}`;
+---
+<footer class="border-t border-white/10 bg-site-black">
+  <div class="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-3 lg:px-8">
+    <div>
+      <img src="/logo.png" alt="Sunrise GED" class="mb-4 h-16 w-16 rounded-full" loading="lazy" />
+      <p class="font-heading text-xl font-bold text-gold">Sunrise GED</p>
+      <p class="mt-2 text-sm text-white/70">{dict.footer.tagline}</p>
+    </div>
+    <div>
+      <p class="mb-3 text-sm font-bold uppercase tracking-wide text-gold">{dict.nav.programs}</p>
+      <ul class="space-y-2 text-sm text-white/75">
+        <li><a class="hover:text-gold" href={`${prefix}/programs`}>{dict.programs.ged}</a></li>
+        <li><a class="hover:text-gold" href={`${prefix}/programs`}>{dict.programs.trauma}</a></li>
+        <li><a class="hover:text-gold" href={`${prefix}/programs`}>{dict.programs.counseling}</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="mb-3 text-sm font-bold uppercase tracking-wide text-gold">{dict.footer.followUs}</p>
+      <a class="text-sm text-white/75 hover:text-gold" href="https://facebook.com/sunrisetraumahealingeducation" target="_blank" rel="noopener noreferrer">Facebook</a>
+      <p class="mt-4 text-sm text-white/60">Mae Sot, Tak Province, Thailand 63110</p>
+    </div>
+  </div>
+  <div class="border-t border-white/10 px-4 py-5 text-center text-xs text-white/50">© {new Date().getFullYear()} Sunrise Trauma Healing Education. {dict.footer.rights}</div>
+</footer>

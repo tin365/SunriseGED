@@ -1,0 +1,9 @@
+---
+import HomePage from '../../components/pages/HomePage.astro';
+import { normalizeLocale } from '../../lib/i18n';
+export function getStaticPaths() {
+  return [{ params: { lang: 'my' } }, { params: { lang: 'th' } }];
+}
+const locale = normalizeLocale(Astro.params.lang);
+---
+<HomePage locale={locale} />

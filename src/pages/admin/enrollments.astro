@@ -1,0 +1,9 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import EnrollmentTable from '../../components/admin/EnrollmentTable';
+export const prerender = false;
+---
+<AdminLayout title="Enrollments">
+  <h1 class="font-heading text-4xl font-bold text-gold">Enrollments</h1>
+  <div class="mt-8"><EnrollmentTable client:load /></div>
+</AdminLayout>

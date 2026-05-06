@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { t, type Locale } from '../../lib/i18n';
+const { locale = 'en' } = Astro.props as { locale: Locale };
+const dict = t(locale);
+const prefix = locale === 'en' ? '' : `/${locale}`;
+const programs = [
+  [dict.programs.ged, dict.programs.gedDesc, 'GED classes cover language arts, mathematics, science, and social studies with study habits, practice tests, and academic mentoring.'],
+  [dict.programs.trauma, dict.programs.traumaDesc, 'Students join carefully facilitated group sessions that build emotional vocabulary, grounding skills, peer trust, and hope after displacement.'],
+  [dict.programs.counseling, dict.programs.counselingDesc, 'Counseling is private, respectful, and coordinated with school support when a student needs extra care for family, stress, grief, or decision-making.'],
+  ['Sports & Activities', dict.programs.communityDesc, 'Activities create normal teenage joy: sports, arts, field trips, cultural days, leadership practice, and service opportunities.']
+];
+---
+<BaseLayout title={dict.programs.title} description={dict.programs.gedDesc}>
+  <section class="bg-site-black px-4 pb-16 pt-32 sm:px-6 lg:px-8"><div class="mx-auto max-w-5xl"><h1 class="font-heading text-5xl font-bold text-gold">{dict.programs.title}</h1><p class="mt-6 max-w-3xl text-lg leading-8 text-white/75">Academic preparation and healing support are designed together so students can learn with stability and confidence.</p></div></section>
+  <section class="section-pad bg-site-dark">
+    <div class="mx-auto grid max-w-6xl gap-8">
+      {programs.map(([title, desc, more]) => <article class="grid gap-6 rounded-2xl border border-white/10 bg-site-black p-6 md:grid-cols-[80px_1fr]"><div class="grid h-16 w-16 place-items-center rounded-full border border-gold text-gold"><svg viewBox="0 0 24 24" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5m0 14h16M7 16l3-4 3 2 4-7"/></svg></div><div><h2 class="font-heading text-3xl font-bold text-gold">{title}</h2><p class="mt-4 leading-8 text-white/75">{desc}</p><p class="mt-4 leading-8 text-white/65">{more}</p><p class="mt-4 text-sm text-white/60"><strong class="text-orange">Who it is for:</strong> Myanmar refugee teens and young adults in the Mae Sot area who need a structured, supportive learning path.</p></div></article>)}
+    </div>
+  </section>
+  <section class="section-pad bg-site-light text-site-black">
+    <div class="mx-auto max-w-5xl"><h2 class="font-heading text-4xl font-bold">Eligibility</h2><ul class="mt-6 grid gap-3 text-lg leading-8 text-site-gray"><li>Students are generally Myanmar youth living in or near Mae Sot.</li><li>Applicants should be ready to attend regular classes and participate respectfully in community life.</li><li>Families or guardians should provide contact information for admissions follow-up.</li></ul></div>
+  </section>
+  <section class="section-pad bg-site-black text-center"><h2 class="font-heading text-4xl font-bold text-gold">Start with an application</h2><a href={`${prefix}/enroll`} class="mt-6 inline-flex rounded-md bg-gold px-7 py-3 font-bold text-site-black hover:bg-gold-dark">{dict.hero.enrollCTA}</a></section>
+</BaseLayout>

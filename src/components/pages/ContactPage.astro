@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactForm from '../ContactForm';
+import { t, type Locale } from '../../lib/i18n';
+const { locale = 'en' } = Astro.props as { locale: Locale };
+const dict = t(locale);
+---
+<BaseLayout title={dict.contact.title} description="Contact Sunrise GED in Mae Sot, Thailand.">
+  <section class="bg-site-black px-4 pb-12 pt-32 sm:px-6 lg:px-8"><div class="mx-auto max-w-5xl"><h1 class="font-heading text-5xl font-bold text-gold">{dict.contact.title}</h1></div></section>
+  <section class="section-pad bg-site-black pt-0">
+    <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-2">
+      <div class="space-y-6">
+        <div class="rounded-2xl border border-white/10 bg-site-dark p-6"><h2 class="font-heading text-2xl font-bold text-gold">{dict.contact.address}</h2><p class="mt-3 text-white/75">{dict.contact.addressValue}</p><p class="mt-3 text-white/60">Business hours: Monday-Friday, 9:00-17:00</p></div>
+        <iframe title="Mae Sot map" src="https://maps.google.com/maps?q=Mae+Sot,Thailand&output=embed" class="h-80 w-full rounded-2xl border-0" loading="lazy"></iframe>
+        <div class="rounded-2xl border border-white/10 bg-site-dark p-6"><h2 class="font-heading text-2xl font-bold text-gold">{dict.contact.chatWithUs}</h2><div class="mt-4 flex flex-wrap gap-3"><a href="https://m.me/sunrisetraumahealingeducation" class="rounded-md bg-[#1877F2] px-4 py-3 font-bold text-white">{dict.contact.messenger}</a><a href="https://line.me/R/ti/p/@YOUR_LINE_OFFICIAL_ID" class="rounded-md bg-[#06C755] px-4 py-3 font-bold text-white">{dict.contact.line}</a><a href="https://facebook.com/sunrisetraumahealingeducation" class="rounded-md border border-white/20 px-4 py-3 font-bold text-white">Facebook</a></div></div>
+      </div>
+      <ContactForm dict={dict} locale={locale} client:load />
+    </div>
+  </section>
+</BaseLayout>

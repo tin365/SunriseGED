@@ -1,0 +1,10 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import MediaUploader from '../../components/admin/MediaUploader';
+export const prerender = false;
+---
+<AdminLayout title="Media">
+  <h1 class="font-heading text-4xl font-bold text-gold">Media</h1>
+  <div class="mt-8"><MediaUploader client:load /></div>
+  <section class="mt-8 rounded-2xl border border-white/10 bg-site-dark p-5"><h2 class="font-heading text-2xl font-bold text-gold">Library</h2><p class="mt-4 text-white/60">Uploaded photos, documents, and YouTube entries appear here through the media API.</p></section>
+</AdminLayout>
