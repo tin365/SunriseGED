@@ -3,51 +3,100 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { t, type Locale } from '../../lib/i18n';
 const { locale = 'en' } = Astro.props as { locale: Locale };
 const dict = t(locale);
+const prefix = locale === 'en' ? '' : `/${locale}`;
+const values = [
+  { name: 'Compassion', icon: 'M12 21s-7-4.6-7-11a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 6.4-7 11-7 11z' },
+  { name: 'Safety', icon: 'M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z' },
+  { name: 'Empowerment', icon: 'M13 2 4 14h6l-1 8 9-12h-6l1-8Z' },
+  { name: 'Community', icon: 'M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm7 0a3 3 0 1 0 0-6M3 20a6 6 0 0 1 12 0M15 14.5a6 6 0 0 1 6 5.5' }
+];
+const team = ['Program Director', 'GED Teacher', 'Counselor', 'Administrator'];
 ---
 <BaseLayout title={dict.about.title} description={dict.about.missionText}>
-  <section class="bg-site-black px-4 pb-16 pt-32 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-5xl">
-      <p class="text-sm font-bold uppercase tracking-wide text-orange">Mae Sot • Myanmar Border</p>
-      <h1 class="mt-4 font-heading text-5xl font-bold text-gold">{dict.about.title}</h1>
-      <p class="mt-6 max-w-3xl text-lg leading-8 text-white/75">{dict.about.missionText}</p>
+  <!-- header -->
+  <section class="relative overflow-hidden bg-paper pb-12 pt-36" style="background: linear-gradient(180deg, #FCE8CD 0%, #FBF6EE 70%);">
+    <div class="bloom pointer-events-none absolute -top-20 left-1/2 h-[40rem] w-[60rem] max-w-[140vw] -translate-x-1/2 opacity-60"></div>
+    <div class="shell relative">
+      <p class="eyebrow" data-reveal>Mae Sot · Myanmar Border</p>
+      <h1 class="font-display mt-5 max-w-3xl text-[clamp(2.6rem,6vw,4.5rem)] font-semibold leading-[1.05] tracking-tight text-ink" data-reveal style="--reveal-delay:100ms">{dict.about.title}</h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft" data-reveal style="--reveal-delay:200ms">{dict.about.missionText}</p>
     </div>
   </section>
-  <section class="section-pad bg-site-dark">
-    <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2">
-      <article><h2 class="font-heading text-3xl font-bold text-gold">{dict.about.mission}</h2><p class="mt-5 leading-8 text-white/75">Sunrise exists so displaced young people can continue learning in a stable, caring environment. GED preparation opens doors to higher education and work, while counseling and group healing help students recover dignity, trust, and confidence.</p></article>
-      <article><h2 class="font-heading text-3xl font-bold text-gold">Vision</h2><p class="mt-5 leading-8 text-white/75">We envision a generation of Myanmar refugee youth who are educated, emotionally supported, and equipped to serve their families and communities with courage and skill.</p></article>
+
+  <!-- mission + vision -->
+  <section class="section bg-paper">
+    <div class="shell grid gap-8 lg:grid-cols-2">
+      <article class="card p-9" data-reveal="left">
+        <span class="grid h-12 w-12 place-items-center rounded-2xl bg-sun/12 text-ember"><svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></span>
+        <h2 class="font-display mt-5 text-3xl font-semibold text-ink">{dict.about.mission}</h2>
+        <p class="mt-4 leading-relaxed text-ink-soft">Sunrise exists so displaced young people can continue learning in a stable, caring environment. GED preparation opens doors to higher education and work, while counseling and group healing help students recover dignity, trust, and confidence.</p>
+      </article>
+      <article class="card p-9" data-reveal="right">
+        <span class="grid h-12 w-12 place-items-center rounded-2xl bg-ember/12 text-ember"><svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span>
+        <h2 class="font-display mt-5 text-3xl font-semibold text-ink">Vision</h2>
+        <p class="mt-4 leading-relaxed text-ink-soft">We envision a generation of Myanmar refugee youth who are educated, emotionally supported, and equipped to serve their families and communities with courage and skill.</p>
+      </article>
     </div>
   </section>
-  <section class="section-pad bg-site-light text-site-black">
-    <div class="mx-auto max-w-4xl">
-      <h2 class="font-heading text-4xl font-bold">Our Story</h2>
-      <div class="mt-6 space-y-5 text-lg leading-8 text-site-gray">
+
+  <!-- story -->
+  <section class="section bg-paper-deep">
+    <div class="shell max-w-prose">
+      <p class="eyebrow" data-reveal>Our Story</p>
+      <h2 class="font-display mt-5 text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-tight tracking-tight text-ink" data-reveal style="--reveal-delay:80ms">A new beginning, every morning</h2>
+      <div class="prose-warm mt-7 text-lg" data-reveal style="--reveal-delay:160ms">
         <p>Mae Sot is a place of crossing and waiting for many families from Myanmar. Students arrive with interrupted education, responsibilities at home, and experiences that no teenager should have to carry alone.</p>
-        <p>Sunrise Trauma Healing Education was formed to respond to both needs at once: rigorous education and careful healing. The school combines GED instruction, counseling, mentoring, and charitable support within a community that respects each student’s language, culture, and story.</p>
+        <p>Sunrise Trauma Healing Education was formed to respond to both needs at once: rigorous education and careful healing. The school combines GED instruction, counseling, mentoring, and charitable support within a community that respects each student's language, culture, and story.</p>
         <p>With about 100 students and a team of teachers and administrators, Sunrise works practically: daily classes, individual guidance, group activities, family communication, and connections with volunteers and donors who share the mission.</p>
       </div>
     </div>
   </section>
-  <section class="section-pad bg-site-black">
-    <div class="mx-auto max-w-7xl">
-      <h2 class="font-heading text-4xl font-bold text-gold">{dict.about.values}</h2>
-      <div class="mt-10 grid gap-5 md:grid-cols-4">
-        {['Compassion', 'Safety', 'Empowerment', 'Community'].map((value) => <article class="rounded-2xl border border-white/10 bg-site-dark p-6"><div class="mb-5 h-10 w-10 rounded-full border-2 border-orange"></div><h3 class="font-heading text-2xl font-bold text-gold">{value}</h3><p class="mt-3 text-sm leading-6 text-white/70">A daily practice in classrooms, counseling rooms, and community life.</p></article>)}
+
+  <!-- values -->
+  <section class="section bg-paper">
+    <div class="shell">
+      <p class="eyebrow" data-reveal>{dict.about.values}</p>
+      <h2 class="font-display mt-5 text-[clamp(2rem,4vw,3rem)] font-semibold leading-tight tracking-tight text-ink" data-reveal style="--reveal-delay:80ms">What we practice daily</h2>
+      <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {values.map((v, i) => (
+          <article class="card card-hover group p-7" data-reveal style={`--reveal-delay:${i * 90}ms`}>
+            <span class="grid h-12 w-12 place-items-center rounded-2xl bg-sun/12 text-ember transition-colors duration-500 group-hover:bg-dawn group-hover:text-white">
+              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d={v.icon}/></svg>
+            </span>
+            <h3 class="font-display mt-5 text-xl font-semibold text-ink">{v.name}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-ink-soft">A daily practice in classrooms, counseling rooms, and community life.</p>
+          </article>
+        ))}
       </div>
     </div>
   </section>
-  <section class="section-pad bg-site-dark">
-    <div class="mx-auto max-w-7xl">
-      <h2 class="font-heading text-4xl font-bold text-gold">{dict.about.team}</h2>
-      <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {['Program Director', 'GED Teacher', 'Counselor', 'Administrator'].map((role, index) => <article class="rounded-2xl border border-white/10 bg-site-black p-5"><div class="aspect-square rounded-xl bg-gradient-to-br from-gold/25 to-site-gray"></div><h3 class="mt-4 font-heading text-xl font-bold text-white">Team Member {index + 1}</h3><p class="text-sm text-gold">{role}</p></article>)}
+
+  <!-- team -->
+  <section class="section bg-paper-deep">
+    <div class="shell">
+      <p class="eyebrow" data-reveal>{dict.about.team}</p>
+      <h2 class="font-display mt-5 text-[clamp(2rem,4vw,3rem)] font-semibold leading-tight tracking-tight text-ink" data-reveal style="--reveal-delay:80ms">The people behind Sunrise</h2>
+      <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {team.map((role, i) => (
+          <article class="card card-hover overflow-hidden" data-reveal style={`--reveal-delay:${i * 90}ms`}>
+            <div class="aspect-square bg-gradient-to-br from-sun-soft via-paper-deep to-paper"></div>
+            <div class="p-5">
+              <h3 class="font-display text-lg font-semibold text-ink">Team Member {i + 1}</h3>
+              <p class="mt-1 text-sm font-semibold text-ember">{role}</p>
+            </div>
+          </article>
+        ))}
       </div>
     </div>
   </section>
-  <section class="bg-gold px-4 py-10 text-site-black sm:px-6 lg:px-8">
-    <div class="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
-      <p class="font-heading text-2xl font-bold">Partners and donors make this work possible.</p>
-      <a href="/contact" class="rounded-md border border-site-black px-5 py-3 font-bold">Contact Sunrise</a>
+
+  <!-- partners CTA -->
+  <section class="section-tight bg-paper">
+    <div class="shell">
+      <div class="flex flex-col items-start justify-between gap-6 rounded-[28px] border border-line bg-surface px-8 py-10 shadow-warm md:flex-row md:items-center" data-reveal>
+        <p class="font-display text-2xl font-semibold text-ink md:text-3xl">Partners and donors make this work possible.</p>
+        <a href={`${prefix}/contact`} class="btn btn-dark shrink-0">Contact Sunrise</a>
+      </div>
     </div>
   </section>
 </BaseLayout>

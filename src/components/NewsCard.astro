@@ -3,15 +3,22 @@ const { post, locale = 'en' } = Astro.props;
 const title = post[`title_${locale}`] || post.title_en;
 const excerpt = post[`excerpt_${locale}`] || post.excerpt_en || '';
 const image = post.featured_image || '';
+const prefix = locale === 'en' ? '' : `/${locale}`;
 ---
-<article class="overflow-hidden rounded-2xl border border-white/10 bg-site-dark">
-  <div class="aspect-[16/10] bg-gradient-to-br from-gold/25 via-site-gray to-site-black">
-    {image && <img src={image} alt="" class="h-full w-full object-cover" loading="lazy" />}
+<article class="card card-hover group flex flex-col overflow-hidden">
+  <div class="relative aspect-[16/10] overflow-hidden">
+    {image
+      ? <img src={image} alt="" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+      : <div class="h-full w-full bg-gradient-to-br from-sun-soft via-paper-deep to-paper transition-transform duration-700 group-hover:scale-105"></div>}
+    <span class="absolute left-4 top-4 inline-flex rounded-full bg-paper/90 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-eyebrow text-ember backdrop-blur">{post.type}</span>
   </div>
-  <div class="p-5">
-    <p class="mb-3 inline-flex rounded-full border border-gold/40 px-3 py-1 text-xs font-semibold uppercase text-gold">{post.type}</p>
-    <h3 class="font-heading text-xl font-bold text-white">{title}</h3>
-    <p class="mt-3 line-clamp-3 text-sm leading-6 text-white/70">{excerpt}</p>
-    <a href={`/media`} class="mt-5 inline-flex text-sm font-bold text-gold hover:text-orange">Read More</a>
+  <div class="flex flex-1 flex-col p-6">
+    <h3 class="font-display text-xl font-semibold leading-snug text-ink">{title}</h3>
+    <p class="mt-3 line-clamp-3 flex-1 text-[0.92rem] leading-relaxed text-ink-soft">{excerpt}</p>
+    <a href={`${prefix}/media`} class="link-underline mt-5 self-start text-sm font-semibold text-ember">
+      {/* read more */}
+      Read More
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
   </div>
 </article>

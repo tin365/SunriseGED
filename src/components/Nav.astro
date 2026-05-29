@@ -6,38 +6,79 @@ const links = [
   ['/about', dict.nav.about],
   ['/programs', dict.nav.programs],
   ['/media', dict.nav.media],
-  ['/enroll', dict.nav.enroll],
   ['/contact', dict.nav.contact]
 ];
 const current = Astro.url.pathname.replace(/^\/(my|th)/, '') || '/';
-const localize = (href: string) => locale === 'en' ? href : `/${locale}${href === '/' ? '' : href}`;
+const isHome = current === '/';
+const localize = (href: string) => (locale === 'en' ? href : `/${locale}${href === '/' ? '' : href}`);
 ---
-<header id="site-nav" class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-site-black/60 transition-colors backdrop-blur-sm">
-  <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8" aria-label="Primary navigation">
-    <a href={localize('/')} class="flex min-w-0 items-center gap-3">
-      <img src="/logo.png" alt="Sunrise GED" class="h-11 w-11 rounded-full" loading="eager" />
-      <span class="truncate font-heading text-lg font-bold text-white">Sunrise GED</span>
+<header
+  id="site-nav"
+  data-home={isHome ? 'true' : 'false'}
+  class="fixed inset-x-0 top-0 z-50 border-b border-transparent transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500"
+>
+  <nav class="shell flex items-center justify-between gap-3 py-3 sm:py-3.5" aria-label="Primary navigation">
+    <a href={localize('/')} class="group flex min-w-0 items-center gap-2.5 sm:gap-3">
+      <span class="relative grid h-10 w-10 shrink-0 place-items-center sm:h-11 sm:w-11">
+        <span class="absolute inset-0 rounded-full bg-dawn opacity-0 blur-md transition-opacity duration-500 group-hover:opacity-60"></span>
+        <img src="/Sunrise_logo.jpg" alt="" class="relative h-10 w-10 rounded-full ring-1 ring-line-strong sm:h-11 sm:w-11" loading="eager" />
+      </span>
+      <span class="flex min-w-0 flex-col leading-none">
+        <span class="nav-brand font-display text-[1.25rem] font-semibold tracking-tight text-ink sm:text-[1.35rem]">Sunrise</span>
+        <span class="nav-sub mt-0.5 hidden text-[0.6rem] font-bold uppercase tracking-eyebrow text-ink-muted min-[380px]:block">Trauma Healing · GED</span>
+      </span>
     </a>
-    <div class="hidden items-center gap-7 lg:flex">
+
+    <div class="hidden items-center gap-8 lg:flex">
       {links.map(([href, label]) => (
-        <a href={localize(href)} class:list={['relative py-2 text-sm font-semibold text-white/85 transition hover:text-gold', current === href && 'text-gold after:absolute after:inset-x-0 after:-bottom-1 after:h-0.5 after:bg-gold']}>{label}</a>
+        <a
+          href={localize(href)}
+          class:list={[
+            'nav-link link-underline text-[0.92rem] font-medium transition-colors duration-300',
+            current === href ? 'is-active text-ember' : 'text-ink-soft hover:text-ink'
+          ]}
+        >
+          {label}
+        </a>
       ))}
     </div>
+
     <div class="hidden items-center gap-3 lg:flex">
       <LanguageSwitcher locale={locale} label={dict.common.switchLanguage} />
-      <a href={localize('/enroll')} class="rounded-md bg-gold px-4 py-2 text-sm font-bold text-site-black transition hover:bg-gold-dark">{dict.hero.enrollCTA}</a>
+      <a href={localize('/enroll')} class="btn btn-primary !px-5 !py-2.5 text-sm">{dict.hero.enrollCTA}</a>
     </div>
-    <button id="menu-button" class="grid h-10 w-10 place-items-center rounded-md border border-white/15 text-white lg:hidden" aria-label="Open menu" aria-expanded="false">
-      <span class="h-0.5 w-5 bg-current before:block before:h-0.5 before:w-5 before:-translate-y-1.5 before:bg-current after:block after:h-0.5 after:w-5 after:translate-y-1 after:bg-current"></span>
+
+    <button
+      id="menu-button"
+      class="nav-burger grid h-11 w-11 shrink-0 place-items-center rounded-full border border-line-strong text-ink transition-colors hover:bg-ink/5 lg:hidden"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <svg class="icon-open" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <path d="M4 7h16M4 12h16M4 17h16" />
+      </svg>
+      <svg class="icon-close" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <path d="M6 6l12 12M18 6L6 18" />
+      </svg>
     </button>
   </nav>
-  <div id="mobile-menu" class="hidden border-t border-white/10 bg-site-black px-4 pb-5 lg:hidden">
-    <div class="grid gap-2 py-4">
-      {links.map(([href, label]) => <a href={localize(href)} class="rounded-md px-3 py-3 text-base font-semibold text-white hover:bg-white/5 hover:text-gold">{label}</a>)}
-    </div>
-    <div class="flex items-center justify-between gap-3">
-      <LanguageSwitcher locale={locale} label={dict.common.switchLanguage} />
-      <a href={localize('/enroll')} class="rounded-md bg-gold px-4 py-2 text-sm font-bold text-site-black">{dict.hero.enrollCTA}</a>
+
+  <div id="mobile-menu" class="mobile-menu border-t border-transparent bg-paper/95 backdrop-blur-xl lg:hidden">
+    <div class="shell grid gap-1 py-5">
+      {links.map(([href, label], i) => (
+        <a
+          href={localize(href)}
+          style={`--i:${i}`}
+          class:list={['m-link rounded-xl px-4 py-3.5 text-base font-medium transition-colors', current === href ? 'bg-sun/10 text-ember' : 'text-ink-soft hover:bg-ink/5 active:bg-ink/5']}
+        >
+          {label}
+        </a>
+      ))}
+      <div class="m-link mt-3 flex items-center justify-between gap-3 border-t border-line pt-4" style={`--i:${links.length}`}>
+        <LanguageSwitcher locale={locale} label={dict.common.switchLanguage} />
+        <a href={localize('/enroll')} class="btn btn-primary !px-5 !py-2.5 text-sm">{dict.hero.enrollCTA}</a>
+      </div>
     </div>
   </div>
 </header>
@@ -45,11 +86,47 @@ const localize = (href: string) => locale === 'en' ? href : `/${locale}${href ==
   const nav = document.getElementById('site-nav');
   const button = document.getElementById('menu-button');
   const menu = document.getElementById('mobile-menu');
-  const setNav = () => nav?.classList.toggle('bg-site-black/95', window.scrollY > 24);
+
+  const isOpen = () => menu?.classList.contains('is-open') ?? false;
+  const isHome = nav?.dataset.home === 'true';
+
+  const setNav = () => {
+    if (!nav) return;
+    const solid = window.scrollY > 16 || isOpen();
+    nav.classList.toggle('bg-paper/80', solid);
+    nav.classList.toggle('backdrop-blur-xl', solid);
+    nav.classList.toggle('border-line', solid);
+    nav.classList.toggle('shadow-warm', solid);
+    // Over the dark photo hero (home, before scroll) → light nav text
+    nav.classList.toggle('nav-over-dark', isHome && !solid);
+  };
+
+  const closeMenu = () => {
+    menu?.classList.remove('is-open');
+    button?.classList.remove('is-open');
+    button?.setAttribute('aria-expanded', 'false');
+    button?.setAttribute('aria-label', 'Open menu');
+    document.body.classList.remove('menu-open');
+    setNav();
+  };
+
+  const openMenu = () => {
+    menu?.classList.add('is-open');
+    button?.classList.add('is-open');
+    button?.setAttribute('aria-expanded', 'true');
+    button?.setAttribute('aria-label', 'Close menu');
+    document.body.classList.add('menu-open');
+    setNav();
+  };
+
   setNav();
   window.addEventListener('scroll', setNav, { passive: true });
-  button?.addEventListener('click', () => {
-    const open = menu?.classList.toggle('hidden') === false;
-    button.setAttribute('aria-expanded', String(open));
-  });
+
+  button?.addEventListener('click', () => (isOpen() ? closeMenu() : openMenu()));
+
+  // Close after tapping a link, on Escape, and when growing to desktop width
+  menu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && isOpen() && closeMenu());
+  const mq = window.matchMedia('(min-width: 1024px)');
+  mq.addEventListener('change', (e) => e.matches && closeMenu());
 </script>

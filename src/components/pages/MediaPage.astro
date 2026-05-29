@@ -10,24 +10,57 @@ const items = [
   { type: 'youtube', title_en: 'Sunrise community introduction', title_my: 'Sunrise အသိုင်းအဝိုင်း မိတ်ဆက်', title_th: 'แนะนำชุมชน Sunrise', thumbnail_url: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' },
   { type: 'document', title_en: 'Enrollment information sheet', title_my: 'ကျောင်းဝင်ခွင့် အချက်အလက်စာရွက်', title_th: 'เอกสารข้อมูลการสมัคร', thumbnail_url: '/sample/document.svg', url: '/documents/enrollment-info.pdf' }
 ];
+const tabs = [
+  { key: 'all', label: 'All' },
+  { key: 'photos', label: dict.media.photos },
+  { key: 'videos', label: dict.media.videos },
+  { key: 'documents', label: dict.media.documents }
+];
 ---
 <BaseLayout title={dict.media.title} description="Photos, videos, and documents from Sunrise GED.">
-  <section class="bg-site-black px-4 pb-12 pt-32 sm:px-6 lg:px-8"><div class="mx-auto max-w-5xl"><h1 class="font-heading text-5xl font-bold text-gold">{dict.media.title}</h1></div></section>
-  <section class="section-pad bg-site-black pt-0">
-    <div class="mx-auto max-w-7xl">
-      <div class="flex flex-wrap gap-3" id="media-tabs">
-        {['All', dict.media.photos, dict.media.videos, dict.media.documents].map((tab) => <button data-filter={tab.toLowerCase()} class="rounded-md border border-white/15 px-4 py-2 text-sm font-bold text-white hover:border-gold hover:text-gold">{tab}</button>)}
+  <section class="relative overflow-hidden bg-paper pb-10 pt-36" style="background: linear-gradient(180deg, #FCE8CD 0%, #FBF6EE 70%);">
+    <div class="bloom pointer-events-none absolute -top-20 left-1/2 h-[36rem] w-[60rem] max-w-[140vw] -translate-x-1/2 opacity-60"></div>
+    <div class="shell relative">
+      <p class="eyebrow" data-reveal>Gallery</p>
+      <h1 class="font-display mt-5 text-[clamp(2.6rem,6vw,4.5rem)] font-semibold leading-[1.05] tracking-tight text-ink" data-reveal style="--reveal-delay:100ms">{dict.media.title}</h1>
+    </div>
+  </section>
+
+  <section class="section bg-paper pt-12">
+    <div class="shell">
+      <div class="flex flex-wrap gap-2.5" id="media-tabs" data-reveal>
+        {tabs.map((tab, i) => (
+          <button data-filter={tab.key} class:list={['media-tab rounded-full border px-5 py-2.5 text-sm font-semibold transition-colors duration-300', i === 0 ? 'border-transparent bg-ink text-paper' : 'border-line-strong text-ink-soft hover:border-ink hover:text-ink']}>{tab.label}</button>
+        ))}
       </div>
-      <div id="media-grid" class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((item) => item.type === 'youtube' ? <div data-type="videos"><VideoCard item={item} locale={locale} /></div> : <a data-type={item.type === 'photo' ? 'photos' : 'documents'} href={item.url} class="block overflow-hidden rounded-2xl border border-white/10 bg-site-dark"><img src={item.thumbnail_url} alt={item.title_en} class="aspect-video w-full object-cover" loading="lazy" /><div class="p-4"><p class="font-bold text-gold">{item[`title_${locale}`] || item.title_en}</p><p class="mt-2 text-sm text-white/60">{item.type === 'document' ? 'Download' : 'Open'}</p></div></a>)}
+      <div id="media-grid" class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((item, i) => (
+          item.type === 'youtube'
+            ? <div data-type="videos" data-reveal="scale" style={`--reveal-delay:${i * 80}ms`}><VideoCard item={item} locale={locale} /></div>
+            : <a data-type={item.type === 'photo' ? 'photos' : 'documents'} href={item.url} class="card card-hover group block overflow-hidden" data-reveal="scale" style={`--reveal-delay:${i * 80}ms`}>
+                <div class="aspect-video overflow-hidden"><img src={item.thumbnail_url} alt={item.title_en} class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" /></div>
+                <div class="flex items-center justify-between p-5">
+                  <p class="font-display text-lg font-semibold text-ink">{item[`title_${locale}`] || item.title_en}</p>
+                  <span class="text-xs font-semibold uppercase tracking-wide text-ember">{item.type === 'document' ? 'Download' : 'Open'}</span>
+                </div>
+              </a>
+        ))}
       </div>
-      <button id="load-more" class="mt-8 rounded-md border border-gold px-5 py-3 font-bold text-gold hover:border-orange hover:text-orange">Load More</button>
     </div>
   </section>
   <script>
-    document.querySelectorAll('#media-tabs button').forEach((button) => {
+    const tabs = document.querySelectorAll('#media-tabs .media-tab');
+    tabs.forEach((button) => {
       button.addEventListener('click', () => {
         const filter = button.getAttribute('data-filter');
+        tabs.forEach((b) => {
+          const active = b === button;
+          b.classList.toggle('bg-ink', active);
+          b.classList.toggle('text-paper', active);
+          b.classList.toggle('border-transparent', active);
+          b.classList.toggle('text-ink-soft', !active);
+          b.classList.toggle('border-line-strong', !active);
+        });
         document.querySelectorAll('#media-grid > *').forEach((item) => {
           item.classList.toggle('hidden', filter !== 'all' && item.getAttribute('data-type') !== filter);
         });

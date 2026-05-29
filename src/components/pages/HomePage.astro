@@ -6,6 +6,7 @@ import { t, type Locale } from '../../lib/i18n';
 const { locale = 'en' } = Astro.props as { locale: Locale };
 const dict = t(locale);
 const prefix = locale === 'en' ? '' : `/${locale}`;
+
 const samplePosts = [
   { id: 'post_003', type: 'news', title_en: 'GED Preparation Classes Open for Applications', title_my: 'GED ပြင်ဆင်ရေး အတန်းများအတွက် လျှောက်လွှာ ဖွင့်ထားပါသည်', title_th: 'เปิดรับสมัครชั้นเรียนเตรียม GED', excerpt_en: 'Apply early for the next student cohort.', excerpt_my: 'လာမည့်အုပ်စုအတွက် အစောပိုင်း လျှောက်ထားပါ။', excerpt_th: 'สมัครล่วงหน้าสำหรับนักเรียนรุ่นถัดไป' },
   { id: 'post_002', type: 'activity', title_en: 'Community Sports Day Builds Confidence', title_my: 'အသိုင်းအဝိုင်း အားကစားနေ့က ယုံကြည်မှု တည်ဆောက်ပေးသည်', title_th: 'วันกีฬาชุมชนช่วยสร้างความมั่นใจ', excerpt_en: 'Team activities support healing and belonging.', excerpt_my: 'အဖွဲ့လိုက် လှုပ်ရှားမှုများက ကုသမှုနှင့် ပါဝင်မှုခံစားချက်ကို ထောက်ပံ့သည်။', excerpt_th: 'กิจกรรมเป็นทีมสนับสนุนการเยียวยาและความรู้สึกเป็นส่วนหนึ่ง' },
@@ -17,98 +18,223 @@ const media = [
   { type: 'youtube', title_en: 'Sunrise introduction', title_my: 'Sunrise မိတ်ဆက်', title_th: 'แนะนำ Sunrise', thumbnail_url: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' },
   { type: 'document', title_en: 'Enrollment guide', title_my: 'လျှောက်ထားမှုလမ်းညွှန်', title_th: 'คู่มือการสมัคร', thumbnail_url: '/sample/document.svg', url: '/documents/enrollment-info.pdf' }
 ];
+
+const programs = [
+  { title: dict.programs.ged, desc: dict.programs.gedDesc, icon: 'M22 10 12 5 2 10l10 5 10-5Z M6 12v4.5c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5V12' },
+  { title: dict.programs.trauma, desc: dict.programs.traumaDesc, icon: 'M12 21s-7-4.6-7-11a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 6.4-7 11-7 11z' },
+  { title: dict.programs.counseling, desc: dict.programs.counselingDesc, icon: 'M21 11.5a8 8 0 0 1-11.7 7.1L4 20l1.4-5.3A8 8 0 1 1 21 11.5Z' },
+  { title: dict.programs.community, desc: dict.programs.communityDesc, icon: 'M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm7 0a3 3 0 1 0 0-6M3 20a6 6 0 0 1 12 0M15 14.5a6 6 0 0 1 6 5.5' }
+];
+
+const marquee = ['Compassion', 'Safety', 'Education', 'Healing', 'Belonging', 'Dignity', 'Community', 'Hope'];
+const stats = [
+  { n: 100, suffix: '+', label_en: 'Students supported', label_my: 'ကျောင်းသား', label_th: 'นักเรียนที่ได้รับการสนับสนุน' },
+  { n: 4, suffix: '', label_en: 'Core programs', label_my: 'အဓိက အစီအစဉ်', label_th: 'โปรแกรมหลัก' },
+  { n: 3, suffix: '', label_en: 'Languages taught', label_my: 'ဘာသာစကား', label_th: 'ภาษาที่ใช้สอน' }
+];
+const statLabel = (s: any) => s[`label_${locale}`] || s.label_en;
 ---
 <BaseLayout title="Home" description={dict.hero.subtitle}>
-  <section class="relative grid min-h-screen place-items-center overflow-hidden bg-site-black px-4 pt-24 text-center" style="background: radial-gradient(ellipse at 0% 100%, rgba(245,184,0,0.15) 0%, transparent 60%), #0A0A0A">
-    <div class="mx-auto max-w-4xl">
-      <img src="/logo.png" alt="Sunrise GED" class="mx-auto mb-8 h-28 w-28 rounded-full" loading="eager" />
-      <div class="mx-auto mb-6 h-0.5 w-16 bg-orange"></div>
-      <h1 class="font-heading text-5xl font-bold leading-tight text-gold sm:text-6xl lg:text-7xl">{dict.hero.tagline}</h1>
-      <p class="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/80">{dict.hero.subtitle}</p>
-      <div class="mt-9 flex flex-col justify-center gap-4 sm:flex-row">
-        <a href={`${prefix}/enroll`} class="rounded-md bg-gold px-7 py-3 font-bold text-site-black hover:bg-gold-dark">{dict.hero.enrollCTA}</a>
-        <a href={`${prefix}/about`} class="rounded-md border border-white/40 px-7 py-3 font-bold text-white hover:border-orange hover:text-orange">{dict.hero.learnMore}</a>
+  <!-- ============ HERO ============ -->
+  <section class="relative isolate flex min-h-[88vh] items-center overflow-hidden sm:min-h-[92vh]">
+    <!-- background photo with a slow Ken-Burns zoom -->
+    <img src="/sunrise_background.jpg" alt="Sunrise students and staff together in Mae Sot" class="hero-zoom absolute inset-0 -z-20 h-full w-full object-cover [object-position:center_46%]" fetchpriority="high" />
+    <!-- warm legibility scrim -->
+    <div class="absolute inset-0 -z-10" style="background: linear-gradient(180deg, rgba(15,10,6,0.66) 0%, rgba(15,10,6,0.50) 42%, rgba(15,10,6,0.86) 100%);"></div>
+    <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-44" style="background: linear-gradient(180deg, rgba(214,86,42,0.30), transparent);"></div>
+
+    <div class="shell relative w-full pb-28 pt-32 text-center sm:pb-32 sm:pt-36">
+      <div class="animate-rise relative mx-auto w-fit">
+        <div class="relative animate-float">
+          <div class="animate-breathe pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[165%] w-[165%] -translate-x-1/2 -translate-y-1/2 rounded-full" style="background: radial-gradient(circle, rgba(242,161,0,0.6), rgba(250,200,95,0.22) 45%, transparent 70%); filter: blur(8px);"></div>
+          <img src="/Sunrise_logo.jpg" alt="Sunrise — The Trauma Healing Program" class="relative h-[clamp(5.5rem,11vw,8.5rem)] w-[clamp(5.5rem,11vw,8.5rem)] rounded-full shadow-lift ring-1 ring-white/15" loading="eager" />
+        </div>
+      </div>
+      <p class="eyebrow is-centered mt-7 text-sun" data-reveal>{dict.contact.addressValue.split(',')[0]} · Myanmar Border</p>
+      <h1 data-reveal style="--reveal-delay:120ms; text-shadow: 0 2px 28px rgba(0,0,0,0.4);" class="mx-auto mt-5 max-w-4xl font-display text-[clamp(2.4rem,6vw,4.75rem)] font-semibold leading-[1.05] tracking-tight text-white">
+        {dict.hero.tagline.split(' ').slice(0, -1).join(' ')} <span class="italic text-dawn">{dict.hero.tagline.split(' ').slice(-1)}</span>
+      </h1>
+      <p data-reveal style="--reveal-delay:240ms" class="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-paper/90">{dict.hero.subtitle}</p>
+      <div data-reveal style="--reveal-delay:360ms" class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <a href={`${prefix}/enroll`} class="btn btn-primary">{dict.hero.enrollCTA}
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href={`${prefix}/about`} class="inline-flex items-center justify-center gap-2 rounded-full border border-white/45 px-7 py-3 font-semibold text-white backdrop-blur-sm transition-colors duration-300 hover:bg-white/10">{dict.hero.learnMore}</a>
       </div>
     </div>
-    <a href="#mission" class="absolute bottom-8 text-sm text-white/60" aria-label="Scroll to mission">↓</a>
+
+    <a href="#about" class="absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 text-xs font-semibold uppercase tracking-eyebrow text-white/75" aria-label="Scroll down">
+      <span class="grid h-9 w-9 animate-float place-items-center rounded-full border border-white/30 bg-white/10 backdrop-blur">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+      </span>
+    </a>
   </section>
 
-  <section id="mission" class="bg-gold px-4 py-8 text-site-black">
-    <div class="mx-auto flex max-w-7xl items-center justify-between gap-6">
-      <p class="font-heading text-2xl font-bold md:text-3xl">Where trauma is met with compassion and education lights the way forward.</p>
-      <span class="hidden text-5xl md:block">”</span>
+  <!-- ============ VALUE MARQUEE ============ -->
+  <div class="marquee overflow-hidden border-y border-line bg-paper-deep py-4">
+    <div class="marquee-track items-center gap-0 text-ink-muted">
+      {Array.from({ length: 2 }).map(() => (
+        <div class="flex items-center gap-0" aria-hidden="true">
+          {marquee.map((word) => (
+            <span class="flex items-center">
+              <span class="px-7 font-display text-xl italic">{word}</span>
+              <span class="h-1.5 w-1.5 rounded-full bg-sun/70"></span>
+            </span>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about" class="section bg-paper">
+    <div class="shell grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-20">
+      <div data-reveal="left">
+        <p class="eyebrow">{dict.about.mission}</p>
+        <h2 class="font-display mt-5 text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-tight tracking-tight text-ink">{dict.about.title}</h2>
+        <div class="prose-warm mt-6 text-lg">
+          <p>{dict.about.missionText}</p>
+          <p>Serving around 100 students with a team of teachers, counselors, administrators, and volunteers near the Myanmar border.</p>
+        </div>
+        <a href={`${prefix}/about`} class="link-underline mt-8 inline-flex font-semibold text-ember">
+          Our Story
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+      <div data-reveal="right" class="relative">
+        <div class="absolute -right-4 -top-4 -z-10 h-full w-full rounded-card bg-dawn opacity-10"></div>
+        <div class="overflow-hidden rounded-card border border-line shadow-warm">
+          <img src="/sample/classroom.svg" alt="Students learning at Sunrise" class="aspect-[4/3] w-full object-cover" loading="lazy" />
+        </div>
+        <div class="absolute -bottom-6 left-6 rounded-2xl border border-line bg-surface px-5 py-4 shadow-lift">
+          <p class="font-display text-3xl font-semibold text-ink"><span data-count="100" data-suffix="+">100+</span></p>
+          <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted">{statLabel(stats[0])}</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="section-pad bg-site-black">
-    <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:items-center">
-      <div>
-        <p class="text-sm font-bold uppercase tracking-wide text-orange">Mae Sot, Thailand</p>
-        <h2 class="mt-3 font-heading text-4xl font-bold text-gold">{dict.about.title}</h2>
-        <p class="mt-5 leading-8 text-white/75">{dict.about.missionText}</p>
-        <p class="mt-4 leading-8 text-white/75">Serving around 100 students with a team of teachers, counselors, administrators, and volunteers near the Myanmar border.</p>
-        <a href={`${prefix}/about`} class="mt-6 inline-flex font-bold text-gold hover:text-orange">Our Story</a>
-      </div>
-      <div class="overflow-hidden rounded-2xl border border-white/10 bg-site-dark">
-        <img src="/sample/classroom.svg" alt="Students learning at Sunrise" class="aspect-[4/3] w-full object-cover" loading="lazy" />
-      </div>
+  <!-- ============ IMPACT ============ -->
+  <section class="relative overflow-hidden bg-espresso py-20 text-paper">
+    <div class="pointer-events-none absolute -top-24 left-1/2 h-72 w-[60rem] max-w-[140vw] -translate-x-1/2 rounded-[50%] opacity-20" style="background: radial-gradient(50% 100% at 50% 0%, #F2A100, transparent 70%);"></div>
+    <div class="shell relative grid gap-10 sm:grid-cols-3">
+      {stats.map((s, i) => (
+        <div class="text-center" data-reveal style={`--reveal-delay:${i * 120}ms`}>
+          <p class="font-display text-[clamp(3rem,7vw,4.5rem)] font-semibold leading-none text-dawn">
+            <span data-count={s.n} data-suffix={s.suffix}>{s.n}{s.suffix}</span>
+          </p>
+          <p class="mt-3 text-sm font-medium uppercase tracking-eyebrow text-paper/65">{statLabel(s)}</p>
+        </div>
+      ))}
     </div>
   </section>
 
-  <section class="section-pad bg-site-dark">
-    <div class="mx-auto max-w-7xl">
-      <h2 class="font-heading text-4xl font-bold text-gold">What We Offer</h2>
-      <div class="mt-10 grid gap-5 md:grid-cols-2">
-        {[
-          [dict.programs.ged, dict.programs.gedDesc, 'M12 3v18M5 7h14M5 17h14'],
-          [dict.programs.trauma, dict.programs.traumaDesc, 'M12 21s-7-4.5-7-11a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 6.5-7 11-7 11z'],
-          [dict.programs.counseling, dict.programs.counselingDesc, 'M4 5h16v10H7l-3 4z'],
-          [dict.programs.community, dict.programs.communityDesc, 'M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm8 0a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21a6 6 0 0 1 12 0M10 21a6 6 0 0 1 12 0']
-        ].map(([title, desc, icon]) => (
-          <article class="rounded-2xl border border-white/10 bg-site-black p-6">
-            <svg class="mb-5 h-10 w-10 text-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d={icon}/></svg>
-            <h3 class="font-heading text-2xl font-bold text-gold">{title}</h3>
-            <p class="mt-3 leading-7 text-white/70">{desc}</p>
-            <div class="mt-6 h-1 w-20 bg-orange"></div>
+  <!-- ============ PROGRAMS ============ -->
+  <section class="section bg-paper">
+    <div class="shell">
+      <div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end" data-reveal>
+        <div>
+          <p class="eyebrow">{dict.programs.title}</p>
+          <h2 class="font-display mt-5 max-w-xl text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-tight tracking-tight text-ink">What We Offer</h2>
+        </div>
+        <a href={`${prefix}/programs`} class="link-underline shrink-0 font-semibold text-ember">
+          All programs
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+      <div class="mt-12 grid gap-6 sm:grid-cols-2">
+        {programs.map((p, i) => (
+          <article class="card card-hover group flex gap-5 p-7" data-reveal style={`--reveal-delay:${i * 90}ms`}>
+            <span class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-sun/12 text-ember transition-colors duration-500 group-hover:bg-dawn group-hover:text-white">
+              <svg viewBox="0 0 24 24" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d={p.icon} /></svg>
+            </span>
+            <div>
+              <h3 class="font-display text-2xl font-semibold text-ink">{p.title}</h3>
+              <p class="mt-2 leading-relaxed text-ink-soft">{p.desc}</p>
+            </div>
           </article>
         ))}
       </div>
     </div>
   </section>
 
-  <section class="section-pad bg-site-light text-site-black">
-    <div class="mx-auto max-w-7xl">
-      <div class="flex items-end justify-between gap-4">
-        <h2 class="font-heading text-4xl font-bold text-site-black">Recent Activities</h2>
-        <a href={`${prefix}/media`} class="font-bold text-orange">{dict.media.viewAll}</a>
+  <!-- ============ RECENT ACTIVITIES ============ -->
+  <section class="section-tight bg-paper-deep">
+    <div class="shell">
+      <div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end" data-reveal>
+        <div>
+          <p class="eyebrow">Latest</p>
+          <h2 class="font-display mt-5 text-[clamp(2rem,4vw,3rem)] font-semibold leading-tight tracking-tight text-ink">Recent Activities</h2>
+        </div>
+        <a href={`${prefix}/media`} class="link-underline shrink-0 font-semibold text-ember">{dict.media.viewAll}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
       </div>
-      <div id="recent-posts" class="mt-10 grid gap-5 md:grid-cols-3">
-        {samplePosts.map((post) => <NewsCard post={post} locale={locale} />)}
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+        {samplePosts.map((post, i) => (
+          <div data-reveal style={`--reveal-delay:${i * 100}ms`}><NewsCard post={post} locale={locale} /></div>
+        ))}
       </div>
     </div>
   </section>
 
-  <section class="section-pad bg-site-black">
-    <div class="mx-auto max-w-7xl">
-      <h2 class="font-heading text-4xl font-bold text-gold">Life at Sunrise</h2>
-      <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {media.map((item) => item.type === 'youtube' ? <VideoCard item={item} locale={locale} /> : <a href={item.url} class="overflow-hidden rounded-2xl border border-white/10 bg-site-dark"><img src={item.thumbnail_url} alt={item.title_en} class="aspect-video w-full object-cover" loading="lazy" /><p class="p-4 text-sm font-bold text-white">{item[`title_${locale}`] || item.title_en}</p></a>)}
+  <!-- ============ GALLERY ============ -->
+  <section class="section bg-paper">
+    <div class="shell">
+      <div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end" data-reveal>
+        <div>
+          <p class="eyebrow">Gallery</p>
+          <h2 class="font-display mt-5 text-[clamp(2rem,4vw,3rem)] font-semibold leading-tight tracking-tight text-ink">Life at Sunrise</h2>
+        </div>
+        <a href={`${prefix}/media`} class="btn btn-ghost shrink-0 !py-2.5 text-sm">Visit the gallery</a>
       </div>
-      <a href={`${prefix}/media`} class="mt-8 inline-flex rounded-md border border-gold px-5 py-3 font-bold text-gold hover:border-orange hover:text-orange">Visit Our Gallery</a>
+      <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {media.map((item, i) => (
+          <div data-reveal="scale" style={`--reveal-delay:${i * 90}ms`}>
+            {item.type === 'youtube'
+              ? <VideoCard item={item} locale={locale} />
+              : <a href={item.url} class="card card-hover group block overflow-hidden">
+                  <div class="aspect-video overflow-hidden"><img src={item.thumbnail_url} alt={item.title_en} class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" /></div>
+                  <p class="p-4 font-display text-base font-semibold text-ink">{item[`title_${locale}`] || item.title_en}</p>
+                </a>}
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
-  <section class="section-pad bg-site-dark">
-    <div class="mx-auto flex max-w-7xl flex-col gap-6 rounded-2xl border border-white/10 p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
-      <div><h2 class="font-heading text-4xl font-bold text-gold">Ready to Begin?</h2><p class="mt-3 max-w-2xl text-white/75">Apply online or contact Sunrise through Messenger or Line if you need help with the form.</p></div>
-      <a href={`${prefix}/enroll`} class="rounded-md bg-gold px-7 py-3 text-center font-bold text-site-black hover:bg-gold-dark">{dict.hero.enrollCTA}</a>
+  <!-- ============ CTA ============ -->
+  <section class="section-tight bg-paper">
+    <div class="shell">
+      <div class="relative overflow-hidden rounded-[28px] bg-espresso px-8 py-14 text-paper sm:px-14" data-reveal="scale">
+        <div class="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full opacity-30" style="background: radial-gradient(circle, #F2A100, transparent 65%);"></div>
+        <div class="relative flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <h2 class="font-display text-[clamp(2rem,4vw,3rem)] font-semibold leading-tight">Ready to begin?</h2>
+            <p class="mt-4 max-w-xl text-paper/70">Apply online, or reach Sunrise through Messenger or Line if you need help with the form. A new day starts here.</p>
+          </div>
+          <a href={`${prefix}/enroll`} class="btn btn-primary shrink-0">{dict.hero.enrollCTA}
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="bg-site-light px-4 py-12 text-site-black sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-7xl">
-      <iframe title="Mae Sot map" src="https://maps.google.com/maps?q=Mae+Sot,Thailand&output=embed" class="h-80 w-full rounded-2xl border-0" loading="lazy"></iframe>
-      <p class="mt-4 font-semibold">{dict.contact.addressValue}</p>
+  <!-- ============ MAP ============ -->
+  <section class="section-tight bg-paper pt-0">
+    <div class="shell" data-reveal>
+      <div class="grid gap-6 lg:grid-cols-[1fr_1.6fr] lg:items-center">
+        <div>
+          <p class="eyebrow">{dict.about.location}</p>
+          <h2 class="font-display mt-4 text-3xl font-semibold text-ink">Find us in Mae Sot</h2>
+          <p class="mt-4 leading-relaxed text-ink-soft">{dict.contact.addressValue}</p>
+          <a href={`${prefix}/contact`} class="link-underline mt-5 inline-flex font-semibold text-ember">{dict.contact.title}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <iframe title="Mae Sot map" src="https://maps.google.com/maps?q=Mae+Sot,Thailand&output=embed" class="h-80 w-full rounded-card border border-line shadow-warm" loading="lazy"></iframe>
+      </div>
     </div>
   </section>
 </BaseLayout>

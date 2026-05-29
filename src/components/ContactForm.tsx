@@ -32,20 +32,41 @@ export default function ContactForm({ dict, locale }: { dict: Dict; locale: 'en'
   }
 
   return (
-    <form onSubmit={submit} className="rounded-2xl border border-white/10 bg-site-dark p-5 sm:p-8">
-      <h2 className="font-heading text-2xl font-bold text-gold">{t.sendMessage}</h2>
-      <div className="mt-6 grid gap-4">
+    <form onSubmit={submit} className="rounded-card border border-line bg-surface p-6 shadow-warm sm:p-9">
+      <h2 className="font-display text-3xl font-semibold text-ink">{t.sendMessage}</h2>
+      <div className="mt-7 grid gap-5">
         <Input label={t.name} name="name" required />
         <Input label={t.email} name="email" type="email" />
         <Input label={t.phone} name="phone" type="tel" />
-        <label><span className="mb-2 block text-sm font-semibold text-gold">{t.message}</span><textarea name="message" required rows={6} className="w-full rounded-md border border-white/10 bg-site-black px-3 py-3 text-white outline-none focus:border-gold" /></label>
+        <label>
+          <span className="field-label">{t.message}</span>
+          <textarea name="message" required rows={6} className="input resize-y" />
+        </label>
       </div>
-      {message && <p className={`mt-4 rounded-md border px-4 py-3 text-sm ${ok ? 'border-gold/50 text-gold' : 'border-orange/50 text-orange-light'}`}>{message}</p>}
-      <button disabled={loading} className="mt-6 w-full rounded-md bg-gold px-5 py-3 font-bold text-site-black hover:bg-gold-dark disabled:opacity-70">{loading ? t.sending : t.send}</button>
+      {message && (
+        <p
+          className={`mt-5 rounded-xl border px-4 py-3 text-sm ${
+            ok ? 'border-sun/40 bg-sun/10 text-sun-deep' : 'border-ember/40 bg-ember/10 text-ember-deep'
+          }`}
+        >
+          {message}
+        </p>
+      )}
+      <button disabled={loading} className="btn btn-primary mt-7 w-full disabled:cursor-not-allowed disabled:opacity-70">
+        {loading ? t.sending : t.send}
+      </button>
     </form>
   );
 }
 
 function Input({ label, name, type = 'text', required = false }: { label: string; name: string; type?: string; required?: boolean }) {
-  return <label><span className="mb-2 block text-sm font-semibold text-gold">{label}</span><input name={name} type={type} required={required} className="w-full rounded-md border border-white/10 bg-site-black px-3 py-3 text-white outline-none focus:border-gold" /></label>;
+  return (
+    <label>
+      <span className="field-label">
+        {label}
+        {required ? ' *' : ''}
+      </span>
+      <input name={name} type={type} required={required} className="input" />
+    </label>
+  );
 }

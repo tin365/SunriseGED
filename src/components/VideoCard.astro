@@ -2,12 +2,15 @@
 const { item, locale = 'en' } = Astro.props;
 const title = item[`title_${locale}`] || item.title_en;
 ---
-<a href={item.url} target="_blank" rel="noopener noreferrer" class="group relative block overflow-hidden rounded-2xl border border-white/10 bg-site-dark">
-  <img src={item.thumbnail_url || '/og-image.jpg'} alt={title} class="aspect-video w-full object-cover opacity-85 transition group-hover:opacity-100" loading="lazy" />
-  <span class="absolute inset-0 grid place-items-center">
-    <span class="grid h-14 w-14 place-items-center rounded-full bg-gold text-site-black transition group-hover:bg-orange">
-      <svg viewBox="0 0 24 24" class="h-7 w-7" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+<a href={item.url} target="_blank" rel="noopener noreferrer" class="card card-hover group relative block overflow-hidden">
+  <div class="relative aspect-video overflow-hidden">
+    <img src={item.thumbnail_url || '/og-image.jpg'} alt={title} class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+    <span class="absolute inset-0 bg-gradient-to-t from-espresso/70 via-espresso/10 to-transparent"></span>
+    <span class="absolute inset-0 grid place-items-center">
+      <span class="grid h-16 w-16 place-items-center rounded-full bg-paper/95 text-ember shadow-lift transition-transform duration-500 ease-dawn group-hover:scale-110">
+        <svg viewBox="0 0 24 24" class="ml-1 h-7 w-7" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </span>
     </span>
-  </span>
-  <span class="absolute inset-x-0 bottom-0 bg-site-black/80 p-4 text-sm font-bold text-white">{title}</span>
+  </div>
+  <p class="absolute inset-x-0 bottom-0 p-4 font-display text-base font-semibold text-paper">{title}</p>
 </a>
