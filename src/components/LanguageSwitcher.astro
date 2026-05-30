@@ -9,13 +9,11 @@ const languages: { code: Locale; name: string }[] = [
 ];
 ---
 <div class="relative">
-  <label class="sr-only" for="language-switcher">{label}</label>
   <svg class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
     <circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z" />
   </svg>
   <select
-    id="language-switcher"
-    class="cursor-pointer appearance-none rounded-full border border-line-strong bg-surface/70 py-2 pl-8 pr-7 text-sm font-semibold text-ink-soft outline-none transition hover:border-ink/40 focus:border-sun"
+    class="js-lang-select cursor-pointer appearance-none rounded-full border border-line-strong bg-surface/70 py-2 pl-8 pr-7 text-sm font-semibold text-ink-soft outline-none transition hover:border-ink/40 focus:border-sun"
     aria-label={label}
   >
     {languages.map((lang) => (
@@ -27,9 +25,12 @@ const languages: { code: Locale; name: string }[] = [
   </svg>
 </div>
 <script>
-  const switcher = document.getElementById('language-switcher');
-  switcher?.addEventListener('change', (event) => {
-    const value = event.target instanceof HTMLSelectElement ? event.target.value : '/';
-    window.location.href = value;
+  // The switcher renders in both the desktop nav and the mobile drawer, so
+  // wire up EVERY instance (a shared id would only match the first one).
+  document.querySelectorAll('.js-lang-select').forEach((el) => {
+    el.addEventListener('change', (event) => {
+      const target = event.target;
+      if (target instanceof HTMLSelectElement) window.location.href = target.value;
+    });
   });
 </script>
