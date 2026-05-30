@@ -2,36 +2,72 @@ import { useState } from 'react';
 
 export default function MediaUploader() {
   const [message, setMessage] = useState('');
+  const [ok, setOk] = useState(false);
 
   async function upload(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const res = await fetch('/api/media/upload', { method: 'POST', body: new FormData(event.currentTarget) });
+    const form = event.currentTarget;
+    const res = await fetch('/api/media/upload', { method: 'POST', body: new FormData(form) });
+    setOk(res.ok);
     setMessage(res.ok ? 'File uploaded.' : 'Upload failed.');
+    if (res.ok) form.reset();
   }
 
   async function addYoutube(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const payload = Object.fromEntries(new FormData(event.currentTarget).entries());
+    const form = event.currentTarget;
+    const payload = Object.fromEntries(new FormData(form).entries());
     const res = await fetch('/api/media/youtube', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    setOk(res.ok);
     setMessage(res.ok ? 'YouTube item added.' : 'Could not add YouTube item.');
+    if (res.ok) form.reset();
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-2">
-      <form onSubmit={upload} className="rounded-2xl border border-white/10 bg-site-dark p-5">
-        <h2 className="font-heading text-2xl font-bold text-gold">Upload Media</h2>
-        <input name="title" placeholder="Title" required className="input mt-5" />
-        <select name="type" className="input mt-3"><option value="photo">Photo</option><option value="document">Document</option></select>
-        <input name="file" type="file" accept="image/jpeg,image/png,application/pdf,video/mp4" required className="mt-3 block w-full rounded-md border border-dashed border-white/20 p-6" />
-        <button className="mt-4 rounded-md bg-gold px-5 py-3 font-bold text-site-black">Upload</button>
-      </form>
-      <form onSubmit={addYoutube} className="rounded-2xl border border-white/10 bg-site-dark p-5">
-        <h2 className="font-heading text-2xl font-bold text-gold">Add YouTube</h2>
-        <input name="title_en" placeholder="Title" required className="input mt-5" />
-        <input name="url" placeholder="YouTube URL" required className="input mt-3" />
-        <button className="mt-4 rounded-md bg-gold px-5 py-3 font-bold text-site-black">Add Video</button>
-      </form>
-      {message && <p className="lg:col-span-2 text-gold">{message}</p>}
+    <div className="space-y-5">
+      {message && (
+        <p className={`rounded-xl border px-4 py-3 text-sm font-medium ${ok ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-700' : 'border-ember/40 bg-ember/10 text-ember-deep'}`}>{message}</p>
+      )}
+      <div className="grid gap-5 lg:grid-cols-2">
+        <form onSubmit={upload} className="card p-6 sm:p-7">
+          <h2 className="font-display text-xl font-semibold text-ink">Upload a file</h2>
+          <p className="mt-1 text-sm text-ink-muted">Photos and documents are stored in R2.</p>
+          <div className="mt-5 grid gap-4">
+            <label>
+              <span className="field-label">Title</span>
+              <input name="title" placeholder="e.g. Classroom learning" required className="input" />
+            </label>
+            <label>
+              <span className="field-label">Type</span>
+              <select name="type" className="input cursor-pointer">
+                <option value="photo">Photo</option>
+                <option value="document">Document</option>
+              </select>
+            </label>
+            <label>
+              <span className="field-label">File</span>
+              <input name="file" type="file" accept="image/jpeg,image/png,application/pdf,video/mp4" required className="block w-full rounded-xl border border-dashed border-line-strong bg-paper/50 p-5 text-sm text-ink-soft file:mr-4 file:rounded-full file:border-0 file:bg-ink file:px-4 file:py-2 file:text-sm file:font-semibold file:text-paper hover:file:bg-espresso-light" />
+            </label>
+          </div>
+          <button className="btn btn-primary mt-5">Upload</button>
+        </form>
+
+        <form onSubmit={addYoutube} className="card p-6 sm:p-7">
+          <h2 className="font-display text-xl font-semibold text-ink">Add a YouTube video</h2>
+          <p className="mt-1 text-sm text-ink-muted">Paste a public YouTube link — no API key needed.</p>
+          <div className="mt-5 grid gap-4">
+            <label>
+              <span className="field-label">Title</span>
+              <input name="title_en" placeholder="Video title" required className="input" />
+            </label>
+            <label>
+              <span className="field-label">YouTube URL</span>
+              <input name="url" type="url" placeholder="https://www.youtube.com/watch?v=…" required className="input" />
+            </label>
+          </div>
+          <button className="btn btn-dark mt-5">Add video</button>
+        </form>
+      </div>
     </div>
   );
 }

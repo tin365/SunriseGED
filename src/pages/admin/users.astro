@@ -1,8 +1,44 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 export const prerender = false;
+const roleBadge: Record<string, string> = {
+  super_admin: 'bg-sun/15 text-sun-deep border-sun/30',
+  editor: 'bg-blue-500/15 text-blue-700 border-blue-500/30',
+  viewer: 'bg-ink/8 text-ink-soft border-line-strong'
+};
+const team = [
+  { name: 'Sunrise Administrator', email: 'admin@sunrisegeded.org', role: 'super_admin', status: 'Active' }
+];
 ---
-<AdminLayout title="Users">
-  <h1 class="font-heading text-4xl font-bold text-gold">Users</h1>
-  <section class="mt-8 rounded-2xl border border-white/10 bg-site-dark p-5"><h2 class="font-heading text-2xl font-bold text-gold">Admin Team</h2><p class="mt-4 text-white/60">Super admins can invite users, assign roles, disable accounts, and reset 2FA through protected API operations.</p><div class="mt-5 overflow-x-auto"><table class="w-full min-w-[640px] text-left text-sm"><thead class="text-gold"><tr><th class="py-3">Name</th><th>Email</th><th>Role</th><th>Status</th></tr></thead><tbody><tr class="border-t border-white/10"><td class="py-3">Sunrise Administrator</td><td>admin@sunrisegeded.org</td><td>super_admin</td><td>Active</td></tr></tbody></table></div></section>
+<AdminLayout title="Users" description="Admin accounts and their roles. Super admins can invite users, change roles, and reset 2FA.">
+  <div class="card overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[640px] text-left text-sm">
+        <thead>
+          <tr class="border-b border-line text-xs uppercase tracking-wide text-ink-muted">
+            <th class="px-5 py-3 font-semibold">Name</th>
+            <th class="px-5 py-3 font-semibold">Email</th>
+            <th class="px-5 py-3 font-semibold">Role</th>
+            <th class="px-5 py-3 font-semibold">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {team.map((u) => (
+            <tr class="border-b border-line/70 last:border-0">
+              <td class="px-5 py-4">
+                <div class="flex items-center gap-3">
+                  <span class="grid h-9 w-9 place-items-center rounded-full bg-dawn text-sm font-bold text-white">{u.name.charAt(0)}</span>
+                  <span class="font-semibold text-ink">{u.name}</span>
+                </div>
+              </td>
+              <td class="px-5 py-4 text-ink-soft">{u.email}</td>
+              <td class="px-5 py-4"><span class:list={['inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold', roleBadge[u.role] || roleBadge.viewer]}>{u.role}</span></td>
+              <td class="px-5 py-4"><span class="inline-flex items-center gap-1.5 text-ink-soft"><span class="h-2 w-2 rounded-full bg-emerald-500"></span>{u.status}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="mt-4 text-sm text-ink-muted">Roles: <strong class="font-semibold text-ink-soft">super_admin</strong> (full access) · <strong class="font-semibold text-ink-soft">editor</strong> (content) · <strong class="font-semibold text-ink-soft">viewer</strong> (read-only).</p>
 </AdminLayout>

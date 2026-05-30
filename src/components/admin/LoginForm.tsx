@@ -46,22 +46,35 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-site-dark p-6">
+    <div className="rounded-card border border-line bg-surface p-6 shadow-warm sm:p-7">
       {!preToken ? (
         <form onSubmit={login} className="grid gap-4">
-          <input name="email" type="email" autoComplete="email" required placeholder="Email" className="input" />
-          <input name="password" type="password" autoComplete="current-password" required placeholder="Password" className="input" />
-          <button disabled={loading} className="rounded-md bg-gold px-5 py-3 font-bold text-site-black">{loading ? 'Signing in...' : 'Login'}</button>
+          <label>
+            <span className="field-label">Email</span>
+            <input name="email" type="email" autoComplete="email" required placeholder="you@example.com" className="input" />
+          </label>
+          <label>
+            <span className="field-label">Password</span>
+            <input name="password" type="password" autoComplete="current-password" required placeholder="••••••••" className="input" />
+          </label>
+          <button disabled={loading} className="btn btn-primary mt-1 w-full disabled:cursor-not-allowed disabled:opacity-70">
+            {loading ? 'Signing in…' : 'Sign in'}
+          </button>
         </form>
       ) : (
         <form onSubmit={verify} className="grid gap-4">
-          <input name="code" inputMode="numeric" pattern="[0-9]{6}" maxLength={6} required placeholder="6-digit code" className="input text-center text-2xl tracking-[0.4em]" />
-          <p className="text-sm text-white/60">Enter the current code from your authenticator app. This code changes every 30 seconds.</p>
-          <button disabled={loading} className="rounded-md bg-gold px-5 py-3 font-bold text-site-black">{loading ? 'Verifying...' : 'Verify'}</button>
+          <p className="text-sm font-semibold text-ink">Two-factor authentication</p>
+          <input name="code" inputMode="numeric" pattern="[0-9]{6}" maxLength={6} required placeholder="000000" className="input text-center text-2xl font-semibold tracking-[0.5em]" />
+          <p className="text-sm leading-relaxed text-ink-muted">Enter the current 6-digit code from your authenticator app. It changes every 30 seconds.</p>
+          <button disabled={loading} className="btn btn-primary w-full disabled:cursor-not-allowed disabled:opacity-70">
+            {loading ? 'Verifying…' : 'Verify'}
+          </button>
         </form>
       )}
-      {message && <p className="mt-4 rounded-md border border-orange/60 bg-orange/10 px-4 py-3 text-sm text-orange-light">{message}</p>}
-      <p className="mt-5 text-xs text-white/50">Forgot password? Contact a super admin. Public registration is disabled.</p>
+      {message && (
+        <p className="mt-4 rounded-xl border border-ember/40 bg-ember/10 px-4 py-3 text-sm text-ember-deep">{message}</p>
+      )}
+      <p className="mt-5 text-xs leading-relaxed text-ink-muted">Forgot your password? Contact a super admin — public registration is disabled.</p>
     </div>
   );
 }
