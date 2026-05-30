@@ -5,6 +5,11 @@ compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "dist"
 
+# Forward /api/* (via src/pages/api/[...path].ts) to the API Worker, same-origin.
+[[services]]
+binding = "API"
+service = "sunrise-ged-api"
+
 [vars]
 ENVIRONMENT = "production"
 SITE_URL = "https://sunrisegeded.org"
