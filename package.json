@@ -8,9 +8,9 @@
     "dev": "astro dev --host 0.0.0.0",
     "build": "astro check && astro build",
     "preview": "wrangler pages dev dist",
-    "worker:dev": "wrangler dev worker/index.ts",
-    "db:migrate": "wrangler d1 execute sunrise-ged-db --file=worker/db/schema.sql",
-    "db:seed": "wrangler d1 execute sunrise-ged-db --file=worker/db/seed.sql",
+    "worker:dev": "wrangler dev -c worker/wrangler.toml",
+    "db:migrate": "wrangler d1 execute sunrise-ged-db -c worker/wrangler.toml --file=worker/db/schema.sql",
+    "db:seed": "wrangler d1 execute sunrise-ged-db -c worker/wrangler.toml --file=worker/db/seed.sql",
     "check": "astro check"
   },
   "dependencies": {
