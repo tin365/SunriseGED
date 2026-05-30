@@ -12,6 +12,13 @@ export default defineConfig({
     }
   },
   integrations: [react(), tailwind()],
+  // Dev only: forward /api calls to the local Worker (npm run worker:dev).
+  // Has no effect on the production build.
+  vite: {
+    server: {
+      proxy: { '/api': 'http://localhost:8787' }
+    }
+  },
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'my', 'th'],
