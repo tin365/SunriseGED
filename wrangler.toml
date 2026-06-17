@@ -1,11 +1,11 @@
-# Cloudflare Pages configuration (the Astro frontend + SSR).
+# Cloudflare Pages configuration (the Vite + React SPA).
 # The API Worker has its own config at worker/wrangler.toml.
 name = "sunrise-ged"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "dist"
 
-# Forward /api/* (via src/pages/api/[...path].ts) to the API Worker, same-origin.
+# Forward /api/* (via functions/api/[[path]].ts) to the API Worker, same-origin.
 [[services]]
 binding = "API"
 service = "sunrise-ged-api"

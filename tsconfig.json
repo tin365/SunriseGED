@@ -1,14 +1,28 @@
 {
-  "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "types": ["@cloudflare/workers-types"],
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "react",
+
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@worker/*": ["worker/*"]
+      "@/*": ["src/*"]
     }
   },
-  "include": [".astro/types.d.ts", "src/**/*", "worker/**/*"]
+  "include": ["src"]
 }

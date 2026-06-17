@@ -24,10 +24,6 @@ Open Admin → Users. Super admins can invite users, change roles, disable accou
 - `editor`: create and edit posts, enrollments, and media
 - `viewer`: read-only admin access
 
-## Printer / Scanner Bridge
-
-Install the local bridge from `bridge/` on the admin computer. Keep it running while printing or auto-uploading scans. It listens only on `localhost:7337`.
-
 ## Email Templates
 
 Templates live in `worker/lib/email.ts`:

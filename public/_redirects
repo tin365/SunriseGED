@@ -1,0 +1,4 @@
+# SPA fallback: serve the app shell for any client-side route.
+# Cloudflare Pages runs Functions (e.g. /api/*) and serves static assets
+# BEFORE this rule, so only unmatched routes fall through to index.html.
+/*    /index.html    200
