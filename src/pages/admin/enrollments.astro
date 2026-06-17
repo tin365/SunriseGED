@@ -1,8 +1,0 @@
----
-import AdminLayout from '../../layouts/AdminLayout.astro';
-import EnrollmentTable from '../../components/admin/EnrollmentTable';
-export const prerender = false;
----
-<AdminLayout title="Enrollments" description="Review student applications and update their status. Every change is recorded in the activity log.">
-  <EnrollmentTable client:load />
-</AdminLayout>

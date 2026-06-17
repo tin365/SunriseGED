@@ -1,8 +1,0 @@
----
-import AdminLayout from '../../layouts/AdminLayout.astro';
-import MediaUploader from '../../components/admin/MediaUploader';
-export const prerender = false;
----
-<AdminLayout title="Media" description="Upload photos and documents to R2 storage, or add YouTube videos to the gallery.">
-  <MediaUploader client:load />
-</AdminLayout>

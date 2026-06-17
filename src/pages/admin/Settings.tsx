@@ -1,0 +1,27 @@
+import AdminLayout from '../../layouts/AdminLayout';
+import ChangePasswordForm from '../../components/admin/ChangePasswordForm';
+
+export default function AdminSettings() {
+  return (
+    <AdminLayout title="Settings" description="Manage your account security.">
+      <div className="grid max-w-2xl gap-6">
+        <ChangePasswordForm />
+
+        <section className="card p-6 sm:p-7">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="font-display text-xl font-semibold text-ink">Two-factor authentication</h2>
+              <p className="mt-1 max-w-md text-sm leading-relaxed text-ink-soft">
+                Add a second layer of security with an authenticator app (Google Authenticator, Authy, 1Password). When enabled, you'll enter a 6-digit code at sign-in.
+              </p>
+            </div>
+            <span className="shrink-0 rounded-full border border-sun/40 bg-sun/12 px-3 py-1 text-xs font-bold uppercase tracking-wide text-sun-deep">Recommended</span>
+          </div>
+          <div className="mt-4 rounded-xl border border-line bg-paper/60 p-4 text-sm leading-relaxed text-ink-soft">
+            Set up from your device using the <code className="rounded bg-ink/5 px-1 py-0.5 text-[0.85em]">/api/auth/setup-totp</code> → <code className="rounded bg-ink/5 px-1 py-0.5 text-[0.85em]">confirm-totp</code> flow, then a code is required on every login.
+          </div>
+        </section>
+      </div>
+    </AdminLayout>
+  );
+}

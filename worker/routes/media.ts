@@ -20,7 +20,7 @@ app.get('/', async (c) => {
 
 app.post('/upload', requireAuth, requireRole('super_admin', 'editor'), async (c) => {
   const form = await c.req.formData();
-  const file = form.get('file');
+  const file: unknown = form.get('file');
   const title = String(stripTags(form.get('title') || 'Uploaded file'));
   const type = String(stripTags(form.get('type') || 'photo'));
   if (!(file instanceof File)) return c.json({ error: 'File required' }, 400);

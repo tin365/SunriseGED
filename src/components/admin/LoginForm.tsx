@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm() {
+  const navigate = useNavigate();
   const [preToken, setPreToken] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -18,7 +20,7 @@ export default function LoginForm() {
         setPreToken(data.token);
       } else {
         localStorage.setItem('sunrise_token', data.token);
-        window.location.href = '/admin';
+        navigate('/admin');
       }
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Login failed');
@@ -37,7 +39,7 @@ export default function LoginForm() {
       const data: any = await res.json();
       if (!res.ok) throw new Error(data.error || 'Invalid TOTP');
       localStorage.setItem('sunrise_token', data.token);
-      window.location.href = '/admin';
+      navigate('/admin');
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Invalid TOTP');
     } finally {
